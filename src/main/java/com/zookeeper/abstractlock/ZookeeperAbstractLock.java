@@ -3,6 +3,8 @@ package com.zookeeper.abstractlock;
 import com.zookeeper.lock.CustomLock;
 import org.I0Itec.zkclient.ZkClient;
 
+import java.util.concurrent.CountDownLatch;
+
 /**
  * @Auther: Mr.Kong
  * @Date: 2020/4/8 09:59
@@ -18,6 +20,9 @@ public abstract class ZookeeperAbstractLock implements CustomLock {
 
     // zk节点创建路径目录
     protected static final String PATH = "/lock";
+
+    // 通过定义计数器标识创建临时节点状态
+    protected CountDownLatch countDownLatch = null;
 
     /**
      * 获取锁
@@ -46,7 +51,7 @@ public abstract class ZookeeperAbstractLock implements CustomLock {
         }
     }
 
-    protected abstract void waitLock();
+    abstract void waitLock();
 
-    protected abstract boolean tryLock();
+    abstract boolean tryLock();
 }

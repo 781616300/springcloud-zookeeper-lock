@@ -12,9 +12,6 @@ import java.util.concurrent.CountDownLatch;
  */
 public class ZookeeperDistrbuteLock extends ZookeeperAbstractLock {
 
-    // 通过定义计数器标识创建临时节点状态
-    private CountDownLatch countDownLatch = null;
-
     @Override
     protected void waitLock() {
 
