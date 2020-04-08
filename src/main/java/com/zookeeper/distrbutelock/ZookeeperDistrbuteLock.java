@@ -13,7 +13,7 @@ import java.util.concurrent.CountDownLatch;
 public class ZookeeperDistrbuteLock extends ZookeeperAbstractLock {
 
     @Override
-    protected void waitLock() {
+    public void waitLock() {
 
         IZkDataListener iZkDataListener = new IZkDataListener() {
             /**
@@ -60,7 +60,7 @@ public class ZookeeperDistrbuteLock extends ZookeeperAbstractLock {
     }
 
     @Override
-    protected boolean tryLock() {
+    public boolean tryLock() {
         try {
             zkClient.createEphemeral(PATH);
             System.out.println("获取lock锁成功");

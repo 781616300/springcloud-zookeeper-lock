@@ -51,7 +51,7 @@ public abstract class ZookeeperAbstractLock implements CustomLock {
         }
     }
 
-    abstract void waitLock();
+    public abstract void waitLock();
 
-    abstract boolean tryLock();
+    public abstract boolean tryLock();
 }
