@@ -48,7 +48,7 @@ public class ZookeeperDistrbuteLock extends ZookeeperAbstractLock {
         if (zkClient.exists(PATH)) {
             countDownLatch = new CountDownLatch(1);
             try {
-                countDownLatch.wait();
+                countDownLatch.await();
             } catch (Exception e) {
                 e.printStackTrace();
             }

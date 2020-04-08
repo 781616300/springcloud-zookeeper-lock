@@ -19,10 +19,10 @@ public abstract class ZookeeperAbstractLock implements CustomLock {
     protected ZkClient zkClient = new ZkClient(CONNECTSTRING);
 
     // zk节点创建路径目录
-    protected static final String PATH = "/lock";
+    public static final String PATH = "/lock";
 
     // 通过定义计数器标识创建临时节点状态
-    protected CountDownLatch countDownLatch = null;
+    public CountDownLatch countDownLatch = new CountDownLatch(1);
 
     /**
      * 获取锁

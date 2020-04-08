@@ -11,6 +11,8 @@ import com.zookeeper.util.NumberGenerator;
  */
 public class OrderService implements Runnable {
 
+    private NumberGenerator numberGenerator = new NumberGenerator();
+
     private CustomLock customLock = new ZookeeperDistrbuteLock();
 
     @Override
@@ -21,7 +23,7 @@ public class OrderService implements Runnable {
     public void getNumber() {
         try {
             customLock.getLock();
-            String number = NumberGenerator.getNumber();
+            String number = numberGenerator.getNumber();
             System.out.println(Thread.currentThread().getName() + "生成订单号：" + number);
         } catch (Exception e) {
             e.printStackTrace();

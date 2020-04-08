@@ -1,6 +1,7 @@
 package com.zookeeper.util;
 
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @Auther: Mr.Kong
@@ -9,7 +10,16 @@ import java.util.UUID;
  */
 public class NumberGenerator {
 
-    public static String getNumber() {
-        return UUID.randomUUID().toString().replace("-", "");
+    // 生成订单号规则
+    private static int count = 0;
+
+    public String getNumber() {
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        return simpleDateFormat.format(new Date()) + "-" + ++count;
     }
 }
