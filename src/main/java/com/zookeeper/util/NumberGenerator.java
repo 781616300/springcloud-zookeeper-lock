@@ -9,7 +9,7 @@ import java.util.UUID;
  */
 public class NumberGenerator {
 
-    public String getNumber() {
+    public static String getNumber() {
         return UUID.randomUUID().toString().replace("-", "");
     }
 }
