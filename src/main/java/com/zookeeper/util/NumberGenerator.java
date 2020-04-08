@@ -14,11 +14,11 @@ public class NumberGenerator {
     private static int count = 0;
 
     public String getNumber() {
-        try {
-            Thread.sleep(200);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(200);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         return simpleDateFormat.format(new Date()) + "-" + ++count;
     }

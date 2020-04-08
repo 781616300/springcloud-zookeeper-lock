@@ -13,16 +13,16 @@ import java.util.concurrent.CountDownLatch;
 public abstract class ZookeeperAbstractLock implements CustomLock {
 
     // zk连接地址
-    private static final String CONNECTSTRING = "114.55.34.44:2181";
+    private String CONNECTSTRING = "114.55.34.44:2181";
 
     // 创建zk连接
     protected ZkClient zkClient = new ZkClient(CONNECTSTRING);
 
     // zk节点创建路径目录
-    public static final String PATH = "/lock";
+    protected String PATH = "/lock";
 
     // 通过定义计数器标识创建临时节点状态
-    public CountDownLatch countDownLatch = new CountDownLatch(1);
+    protected CountDownLatch countDownLatch = new CountDownLatch(1);
 
     /**
      * 获取锁
@@ -51,7 +51,7 @@ public abstract class ZookeeperAbstractLock implements CustomLock {
         }
     }
 
-    public abstract void waitLock();
+    protected abstract void waitLock();
 
-    public abstract boolean tryLock();
+    protected abstract boolean tryLock();
 }

@@ -30,7 +30,7 @@ public class LockTest {
 
         System.out.println("开始生成订单号......");
         long begin = System.currentTimeMillis();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             new Thread(new OrderService()).start();
         }
         long end = System.currentTimeMillis();

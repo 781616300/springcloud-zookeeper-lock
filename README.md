@@ -71,13 +71,16 @@ public interface CustomLock {
 public abstract class ZookeeperAbstractLock implements CustomLock {
 
     // zk连接地址
-    private static final String CONNECTSTRING = "114.55.34.44:2181";
+    private String CONNECTSTRING = "114.55.34.44:2181";
 
     // 创建zk连接
     protected ZkClient zkClient = new ZkClient(CONNECTSTRING);
 
     // zk节点创建路径目录
-    protected static final String PATH = "/lock";
+    protected String PATH = "/lock";
+
+    // 通过定义计数器标识创建临时节点状态
+    protected CountDownLatch countDownLatch = new CountDownLatch(1);
 
     /**
      * 获取锁
@@ -117,9 +120,6 @@ public abstract class ZookeeperAbstractLock implements CustomLock {
 ```
 public class ZookeeperDistrbuteLock extends ZookeeperAbstractLock {
 
-    // 通过定义计数器标识创建临时节点状态
-    private CountDownLatch countDownLatch = null;
-
     @Override
     protected void waitLock() {
 
@@ -156,7 +156,7 @@ public class ZookeeperDistrbuteLock extends ZookeeperAbstractLock {
         if (zkClient.exists(PATH)) {
             countDownLatch = new CountDownLatch(1);
             try {
-                countDownLatch.wait();
+                countDownLatch.await();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -174,7 +174,6 @@ public class ZookeeperDistrbuteLock extends ZookeeperAbstractLock {
             System.out.println("获取lock锁成功");
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
             System.out.println("获取lock锁失败");
             return false;
         }
@@ -187,14 +186,25 @@ public class ZookeeperDistrbuteLock extends ZookeeperAbstractLock {
 ```
 public class NumberGenerator {
 
-    public static String getNumber() {
-        return UUID.randomUUID().toString().replace("-", "");
+    // 生成订单号规则
+    private static int count = 0;
+
+    public String getNumber() {
+//        try {
+//            Thread.sleep(200);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        return simpleDateFormat.format(new Date()) + "-" + ++count;
     }
 }
 ```
 
 ```
 public class OrderService implements Runnable {
+
+    private NumberGenerator numberGenerator = new NumberGenerator();
 
     private CustomLock customLock = new ZookeeperDistrbuteLock();
 
@@ -206,7 +216,7 @@ public class OrderService implements Runnable {
     public void getNumber() {
         try {
             customLock.getLock();
-            String number = NumberGenerator.getNumber();
+            String number = numberGenerator.getNumber();
             System.out.println(Thread.currentThread().getName() + "生成订单号：" + number);
         } catch (Exception e) {
             e.printStackTrace();
@@ -241,7 +251,7 @@ public class LockTest {
 
         System.out.println("开始生成订单号......");
         long begin = System.currentTimeMillis();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             new Thread(new OrderService()).start();
         }
         long end = System.currentTimeMillis();
